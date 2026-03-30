@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const supabase = await createClient();
   const { start, end, label } = monthBounds();
 
-  const [incomes, expenses, church, debts, rentRows, profiles] = await Promise.all([
+  const [incomes, expenses, church, debts, rentRows, profiles, debtPaymentsMonth] = await Promise.all([
     supabase.from("incomes").select("amount").eq("household_id", householdId).gte("income_date", start).lte("income_date", end),
     supabase.from("expenses").select("amount, category").eq("household_id", householdId).gte("expense_date", start).lte("expense_date", end),
     supabase
@@ -30,10 +30,18 @@ export default async function DashboardPage() {
       .gte("expense_date", start)
       .lte("expense_date", end),
     supabase.from("profiles").select("id, display_name").eq("household_id", householdId),
+    supabase
+      .from("debt_payments")
+      .select("amount")
+      .eq("household_id", householdId)
+      .gte("payment_date", start)
+      .lte("payment_date", end),
   ]);
 
   const incomeTotal = sumAmount(incomes.data);
   const expenseTotal = sumAmount(expenses.data);
+  const debtPaidThisMonth = sumAmount(debtPaymentsMonth.data);
+  const approximateLeftover = incomeTotal - expenseTotal - debtPaidThisMonth;
   const rentTotal = sumAmount(rentRows.data);
   const diezmo = sumAmount(church.data?.filter((c) => c.payment_type === "diezmo") ?? null);
   const ayuno = sumAmount(church.data?.filter((c) => c.payment_type === "ayuno") ?? null);
@@ -75,12 +83,29 @@ export default async function DashboardPage() {
         <div className={statCard}>
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Gastos del mes</p>
           <p className="mt-2 text-2xl font-semibold tabular-nums">{formatMoney(expenseTotal)}</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Balance aprox.: {formatMoney(incomeTotal - expenseTotal)}
+          {debtPaidThisMonth > 0 ? (
+            <p className="mt-2 text-xs text-muted-foreground">
+              + pagos a deudas este mes:{" "}
+              <span className="font-semibold tabular-nums text-foreground">{formatMoney(debtPaidThisMonth)}</span>
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">Pagos a deudas del mes: sin registros.</p>
+          )}
+          <p className="mt-2 border-t border-border/60 pt-2 text-xs leading-relaxed text-muted-foreground">
+            <span className="font-medium text-foreground">Disponible aprox. en el mes:</span>{" "}
+            <span className="tabular-nums font-semibold text-foreground">{formatMoney(approximateLeftover)}</span>
+            <span className="block mt-1 opacity-90">
+              (Ingresos del mes menos gastos registrados y menos lo pagado a deudas en &quot;Deudas&quot;.)
+            </span>
           </p>
-          <Link href="/gastos" className="mt-2 inline-block text-xs font-semibold text-primary underline-offset-4 hover:underline">
-            Ver gastos
-          </Link>
+          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+            <Link href="/gastos" className="text-xs font-semibold text-primary underline-offset-4 hover:underline">
+              Ver gastos
+            </Link>
+            <Link href="/deudas" className="text-xs font-semibold text-primary underline-offset-4 hover:underline">
+              Ver deudas
+            </Link>
+          </div>
         </div>
         <div className={`${statCard} sm:col-span-2 lg:col-span-1`}>
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Arriendo (este mes)</p>
