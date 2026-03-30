@@ -97,8 +97,8 @@ export default async function GastosPage() {
             </tr>
           </thead>
           <tbody>
-            {(items ?? []).map((r) => (
-              <tr key={r.id} className="border-b border-border/50">
+            {items.map((r) => (
+              <tr key={`${r.kind}-${r.id}`} className="border-b border-border/50">
                 <td className="px-4 py-3 tabular-nums text-muted-foreground">{r.date}</td>
                 <td className="px-4 py-3">
                   {r.kind === "debt_payment" ? (
