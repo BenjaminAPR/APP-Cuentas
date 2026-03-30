@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.local.example
 
+# Temporal al regenerar iconos desde una foto
+public/_icon_temp.png
+
 # vercel
 .vercel
 
