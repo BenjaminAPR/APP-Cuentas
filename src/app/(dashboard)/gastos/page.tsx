@@ -1,8 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
-import { formatMoney } from "@/lib/money";
+import { formatMoney, monthBounds } from "@/lib/money";
 import { loadMemberNames } from "@/lib/members";
 import { requireHousehold } from "@/lib/session";
 import { ExpenseForm } from "./ui";
+import { GastosClient } from "./ui-client";
 
 const categories = [
   { value: "arriendo", label: "Arriendo" },
@@ -18,23 +19,43 @@ const categories = [
 export default async function GastosPage() {
   const { householdId } = await requireHousehold();
   const supabase = await createClient();
-  const [expensesRes, debtPaymentsRes, debtsRes] = await Promise.all([
+  const { start, end, label: monthLabel } = monthBounds();
+
+  const [
+    expensesRes,
+    debtPaymentsRes,
+    debtsRes,
+    expensesMonthRes,
+    debtPaymentsMonthRes,
+  ] = await Promise.all([
     supabase
       .from("expenses")
       .select("id, amount, expense_date, category, notes, created_by")
       .eq("household_id", householdId)
       .order("expense_date", { ascending: false })
-      .limit(120),
+      .limit(40),
     supabase
       .from("debt_payments")
       .select("id, amount, payment_date, notes, created_by, debt_id")
       .eq("household_id", householdId)
       .order("payment_date", { ascending: false })
-      .limit(120),
+      .limit(40),
     supabase
       .from("debts")
       .select("id, name")
       .eq("household_id", householdId),
+    supabase
+      .from("expenses")
+      .select("amount")
+      .eq("household_id", householdId)
+      .gte("expense_date", start)
+      .lte("expense_date", end),
+    supabase
+      .from("debt_payments")
+      .select("amount")
+      .eq("household_id", householdId)
+      .gte("payment_date", start)
+      .lte("payment_date", end),
   ]);
 
   const names = await loadMemberNames(supabase, householdId);
@@ -45,36 +66,12 @@ export default async function GastosPage() {
     (debtsRes.data ?? []).map((d: { id: string; name: string }) => [d.id, d.name]),
   );
 
-  type ListItem = {
-    id: string;
-    kind: "expense" | "debt_payment";
-    date: string;
-    categoryText: string;
-    amount: number;
-    createdBy: string;
-    notes: string | null;
-  };
+  const sum = (rows: { amount: number | string | null }[] | null | undefined) =>
+    (rows ?? []).reduce((acc, r) => acc + Number(r.amount ?? 0), 0);
 
-  const items: ListItem[] = [
-    ...((expensesRes.data ?? []) as any[]).map((r) => ({
-      id: r.id,
-      kind: "expense" as const,
-      date: r.expense_date,
-      categoryText: label(r.category),
-      amount: Number(r.amount),
-      createdBy: r.created_by,
-      notes: r.notes ?? null,
-    })),
-    ...((debtPaymentsRes.data ?? []) as any[]).map((p) => ({
-      id: p.id,
-      kind: "debt_payment" as const,
-      date: p.payment_date,
-      categoryText: `Pago de deuda: ${debtNameById[p.debt_id] ?? "Deuda"}`,
-      amount: Number(p.amount),
-      createdBy: p.created_by,
-      notes: p.notes ?? null,
-    })),
-  ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const expensesMonth = sum(expensesMonthRes.data);
+  const debtPaidMonth = sum(debtPaymentsMonthRes.data);
+  const outflowMonth = expensesMonth + debtPaidMonth;
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
@@ -84,46 +81,50 @@ export default async function GastosPage() {
           Aquí ves gastos normales y también los pagos de deudas como “Pago de deuda”.
         </p>
       </div>
-      <ExpenseForm householdId={householdId} categories={categories} />
-      <div className="overflow-x-auto rounded-2xl border border-border">
-        <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="border-b border-border bg-muted/45 text-xs uppercase text-muted-foreground">
-            <tr>
-              <th className="px-4 py-3">Fecha</th>
-              <th className="px-4 py-3">Categoría</th>
-              <th className="px-4 py-3 text-right">Monto</th>
-              <th className="px-4 py-3">Quién</th>
-              <th className="px-4 py-3">Notas</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((r) => (
-              <tr key={`${r.kind}-${r.id}`} className="border-b border-border/50">
-                <td className="px-4 py-3 tabular-nums text-muted-foreground">{r.date}</td>
-                <td className="px-4 py-3">
-                  {r.kind === "debt_payment" ? (
-                    <span className="text-foreground font-medium">{r.categoryText}</span>
-                  ) : (
-                    <span>{r.categoryText}</span>
-                  )}
-                </td>
-                <td className="px-4 py-3 text-right font-medium tabular-nums">
-                  {formatMoney(r.amount)}
-                </td>
-                <td className="px-4 py-3 text-muted-foreground">{names[r.createdBy] ?? "—"}</td>
-                <td className="max-w-[200px] truncate px-4 py-3 text-muted-foreground">
-                  {r.notes ?? "—"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {items.length === 0 ? (
-          <p className="p-6 text-center text-sm text-muted-foreground">
-            Sin registros de gastos ni pagos de deudas.
+
+      <section className="grid gap-4 sm:grid-cols-3">
+        <div className="ui-card p-5 ring-1 ring-stone-900/[0.04] shadow-sm">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Gastos del mes
           </p>
-        ) : null}
-      </div>
+          <p className="mt-2 text-2xl font-semibold tabular-nums">
+            {formatMoney(expensesMonth)}
+          </p>
+          <p className="mt-1 text-xs capitalize text-muted-foreground">{monthLabel}</p>
+        </div>
+        <div className="ui-card p-5 ring-1 ring-stone-900/[0.04] shadow-sm">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Pagos a deudas (mes)
+          </p>
+          <p className="mt-2 text-2xl font-semibold tabular-nums">
+            {formatMoney(debtPaidMonth)}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Se registran en “Deudas”, pero cuentan como salida.
+          </p>
+        </div>
+        <div className="ui-card p-5 ring-1 ring-stone-900/[0.04] shadow-sm border-l-[3px] border-l-primary/55">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            Salida total (mes)
+          </p>
+          <p className="mt-2 text-2xl font-semibold tabular-nums">
+            {formatMoney(outflowMonth)}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Gastos + pagos de deudas.
+          </p>
+        </div>
+      </section>
+
+      <ExpenseForm householdId={householdId} categories={categories} />
+      <GastosClient
+        householdId={householdId}
+        initialExpenses={(expensesRes.data ?? []) as any[]}
+        initialDebtPayments={(debtPaymentsRes.data ?? []) as any[]}
+        debtNameById={debtNameById}
+        memberNames={names}
+        categoryLabel={label}
+      />
     </div>
   );
 }
