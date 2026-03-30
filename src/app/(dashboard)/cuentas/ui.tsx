@@ -53,19 +53,19 @@ export function AccountForm({ householdId }: { householdId: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 rounded-2xl border border-zinc-200 p-4 sm:grid-cols-2 lg:grid-cols-5 dark:border-zinc-800">
+    <form onSubmit={onSubmit} className="grid gap-3 rounded-2xl border border-border p-4 sm:grid-cols-2 lg:grid-cols-5">
       {error ? <p className="sm:col-span-2 lg:col-span-5 text-sm text-red-600">{error}</p> : null}
       <input
         placeholder="Nombre (ej. Banco Estado — corriente)"
         required
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm sm:col-span-2 dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2"
       />
       <select
         value={account_type}
         onChange={(e) => setAccountType(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
       >
         {types.map((t) => (
           <option key={t.value} value={t.value}>
@@ -77,18 +77,18 @@ export function AccountForm({ householdId }: { householdId: string }) {
         placeholder="Institución (opcional)"
         value={institution}
         onChange={(e) => setInstitution(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
       />
       <input
         placeholder="Notas"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
       />
       <button
         type="submit"
         disabled={loading}
-        className="rounded-lg bg-foreground py-2 text-sm font-medium text-background disabled:opacity-50 sm:col-span-2 lg:col-span-1"
+        className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50 sm:col-span-2 lg:col-span-1"
       >
         {loading ? "Guardando…" : "Agregar cuenta"}
       </button>

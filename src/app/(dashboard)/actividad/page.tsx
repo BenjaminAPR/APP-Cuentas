@@ -26,7 +26,7 @@ export default async function ActividadPage() {
     <div className="mx-auto max-w-4xl space-y-6">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Actividad</h1>
-        <p className="mt-1 text-sm text-zinc-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           Historial de altas, bajas y cambios en ingresos, gastos, iglesia y deudas.
         </p>
       </div>
@@ -34,25 +34,25 @@ export default async function ActividadPage() {
         {(rows ?? []).map((r) => (
           <li
             key={r.id}
-            className="rounded-xl border border-zinc-200 px-4 py-3 text-sm dark:border-zinc-800"
+            className="rounded-xl border border-border px-4 py-3 text-sm"
           >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <span className="font-medium">
                 {labels[r.table_name] ?? r.table_name} ·{" "}
-                <span className="uppercase text-zinc-500">{r.action}</span>
+                <span className="uppercase text-muted-foreground">{r.action}</span>
               </span>
-              <time className="text-xs tabular-nums text-zinc-400">
+              <time className="text-xs tabular-nums text-muted-foreground/75">
                 {new Date(r.created_at).toLocaleString("es-CL")}
               </time>
             </div>
-            <p className="mt-1 text-xs text-zinc-500">
+            <p className="mt-1 text-xs text-muted-foreground">
               Usuario: {r.user_id ? names[r.user_id] ?? r.user_id.slice(0, 8) : "—"}
             </p>
           </li>
         ))}
       </ul>
       {rows?.length === 0 ? (
-        <p className="text-sm text-zinc-500">Aún no hay eventos registrados.</p>
+        <p className="text-sm text-muted-foreground">Aún no hay eventos registrados.</p>
       ) : null}
     </div>
   );

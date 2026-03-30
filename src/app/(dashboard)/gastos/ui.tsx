@@ -52,7 +52,7 @@ export function ExpenseForm({ householdId, categories }: { householdId: string; 
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 rounded-2xl border border-zinc-200 p-4 sm:grid-cols-2 lg:grid-cols-6 dark:border-zinc-800">
+    <form onSubmit={onSubmit} className="grid gap-3 rounded-2xl border border-border p-4 sm:grid-cols-2 lg:grid-cols-6">
       {error ? <p className="sm:col-span-2 lg:col-span-6 text-sm text-red-600">{error}</p> : null}
       <input
         type="text"
@@ -61,19 +61,19 @@ export function ExpenseForm({ householdId, categories }: { householdId: string; 
         required
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
       />
       <input
         type="date"
         required
         value={expense_date}
         onChange={(e) => setExpenseDate(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
       />
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm sm:col-span-2 lg:col-span-2 dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2 lg:col-span-2"
       >
         {categories.map((c) => (
           <option key={c.value} value={c.value}>
@@ -86,12 +86,12 @@ export function ExpenseForm({ householdId, categories }: { householdId: string; 
         placeholder="Notas"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm lg:col-span-1 dark:border-zinc-700 dark:bg-zinc-900"
+        className="rounded-lg border border-border bg-card px-3 py-2 text-sm lg:col-span-1"
       />
       <button
         type="submit"
         disabled={loading}
-        className="rounded-lg bg-foreground py-2 text-sm font-medium text-background disabled:opacity-50"
+        className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50"
       >
         {loading ? "Guardando…" : "Agregar"}
       </button>

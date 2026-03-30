@@ -170,19 +170,19 @@ export function DebtForms({
         <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-600">{error}</p>
       ) : null}
 
-      <form onSubmit={addDebt} className="grid gap-3 rounded-2xl border border-zinc-200 p-4 sm:grid-cols-2 lg:grid-cols-3 dark:border-zinc-800">
+      <form onSubmit={addDebt} className="grid gap-3 rounded-2xl border border-border p-4 sm:grid-cols-2 lg:grid-cols-3">
         <h2 className="sm:col-span-2 lg:col-span-3 text-sm font-semibold">Nueva deuda</h2>
         <input
           placeholder="Nombre (ej. TC Banco X)"
           required
           value={nName}
           onChange={(e) => setNName(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <select
           value={nType}
           onChange={(e) => setNType(e.target.value as "tarjeta" | "otro")}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         >
           <option value="tarjeta">Tarjeta</option>
           <option value="otro">Otra</option>
@@ -192,54 +192,54 @@ export function DebtForms({
           required
           value={nBalance}
           onChange={(e) => setNBalance(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <input
           placeholder="Monto original total (opcional)"
           value={nTotal}
           onChange={(e) => setNTotal(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <input
           placeholder="Valor cuota típica (opcional)"
           value={nInstallment}
           onChange={(e) => setNInstallment(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <input
           placeholder="Nº cuotas totales (opcional)"
           value={nInstallTotal}
           onChange={(e) => setNInstallTotal(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <input
           placeholder="Cuotas ya pagadas (default 0)"
           value={nInstallPaid}
           onChange={(e) => setNInstallPaid(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <input
           placeholder="Día vencimiento 1–31 (opcional)"
           value={nDue}
           onChange={(e) => setNDue(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
         />
         <input
           placeholder="Acreedor (opcional)"
           value={nCreditor}
           onChange={(e) => setNCreditor(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm sm:col-span-2 dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2"
         />
         <input
           placeholder="Notas"
           value={nNotes}
           onChange={(e) => setNNotes(e.target.value)}
-          className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm sm:col-span-2 dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2"
         />
         <button
           type="submit"
           disabled={loadingNew}
-          className="rounded-lg bg-foreground py-2 text-sm font-medium text-background disabled:opacity-50 sm:col-span-2 lg:col-span-1"
+          className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50 sm:col-span-2 lg:col-span-1"
         >
           {loadingNew ? "Guardando…" : "Agregar deuda"}
         </button>
@@ -248,7 +248,7 @@ export function DebtForms({
       <div className="space-y-6">
         <h2 className="text-sm font-semibold">Estado y pagos</h2>
         {debts.length === 0 ? (
-          <p className="text-sm text-zinc-500">No hay deudas registradas.</p>
+          <p className="text-sm text-muted-foreground">No hay deudas registradas.</p>
         ) : (
           <ul className="space-y-6">
             {debts.map((d) => {
@@ -259,12 +259,12 @@ export function DebtForms({
               return (
                 <li
                   key={d.id}
-                  className="rounded-2xl border border-zinc-200 p-4 dark:border-zinc-800"
+                  className="rounded-2xl border border-border p-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
                       <p className="font-medium">{d.name}</p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-muted-foreground">
                         {d.debt_type === "tarjeta" ? "Tarjeta" : "Otra"} · Alta:{" "}
                         {memberNames[d.created_by] ?? "—"}
                         {d.due_day ? ` · Vence día ${d.due_day}` : ""}
@@ -273,56 +273,56 @@ export function DebtForms({
                         Saldo: {formatMoney(Number(d.balance_remaining))}
                       </p>
                       {remaining != null ? (
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                           Cuotas restantes (aprox.): {remaining} de {total}
                         </p>
                       ) : null}
                       {d.notes ? (
-                        <p className="mt-2 text-sm text-zinc-500">{d.notes}</p>
+                        <p className="mt-2 text-sm text-muted-foreground">{d.notes}</p>
                       ) : null}
                     </div>
                   </div>
                   <form
                     onSubmit={(ev) => payDebt(ev, d)}
-                    className="mt-4 flex flex-wrap items-end gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800"
+                    className="mt-4 flex flex-wrap items-end gap-2 border-t border-border/50 pt-4"
                   >
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs text-zinc-500">Monto pago</label>
+                      <label className="text-xs text-muted-foreground">Monto pago</label>
                       <input
                         name="amount"
                         required
                         placeholder="Monto"
-                        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs text-zinc-500">Fecha</label>
+                      <label className="text-xs text-muted-foreground">Fecha</label>
                       <input
                         name="payment_date"
                         type="date"
                         defaultValue={new Date().toISOString().slice(0, 10)}
-                        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <label className="text-xs text-zinc-500">Cuotas cubiertas</label>
+                      <label className="text-xs text-muted-foreground">Cuotas cubiertas</label>
                       <input
                         name="installments_covered"
                         type="number"
                         min={0}
                         defaultValue={1}
-                        className="w-24 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                        className="w-24 rounded-lg border border-border bg-card px-3 py-2 text-sm"
                       />
                     </div>
                     <input
                       name="notes"
                       placeholder="Notas"
-                      className="min-w-[120px] flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                      className="min-w-[120px] flex-1 rounded-lg border border-border bg-card px-3 py-2 text-sm"
                     />
                     <button
                       type="submit"
                       disabled={payingId === d.id}
-                      className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white dark:bg-zinc-100 dark:text-zinc-900 disabled:opacity-50"
+                      className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
                     >
                       {payingId === d.id ? "…" : "Registrar pago"}
                     </button>

@@ -53,62 +53,61 @@ export function OnboardingClient({ email }: Props) {
   return (
     <div className="w-full max-w-md space-y-10">
       <div className="text-center">
-        <h1 className="text-2xl font-semibold tracking-tight">Configurar hogar</h1>
-        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          Conectado como {email}. Creá el hogar o unite con el código de seis caracteres.
+        <p className="text-[0.65rem] font-medium uppercase tracking-[0.14em] text-primary/85">
+          Último paso
+        </p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">Configurar hogar</h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+          Conectado como <span className="font-medium text-foreground/90">{email}</span>. Creá el hogar nuevo o unite con el código que te compartieron.
         </p>
       </div>
 
       {message ? (
-        <p className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <p className="rounded-xl border border-border bg-muted/45 px-4 py-3 text-sm">
           {message}
         </p>
       ) : null}
 
       {createdCode ? (
-        <div className="rounded-xl border-2 border-dashed border-foreground/20 p-6 text-center">
-          <p className="text-xs uppercase tracking-wide text-zinc-500">Código para tu pareja</p>
-          <p className="mt-2 font-mono text-3xl font-bold tracking-widest">{createdCode}</p>
+        <div className="rounded-2xl border-2 border-dashed border-primary/35 bg-primary/[0.06] p-7 text-center">
+          <p className="text-xs font-medium uppercase tracking-wide text-primary">Código para tu pareja</p>
+          <p className="mt-3 font-mono text-3xl font-bold tracking-[0.2em] text-foreground">{createdCode}</p>
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="mt-4 text-sm font-medium underline underline-offset-4"
+            className="mt-5 text-sm font-semibold text-primary underline-offset-4 hover:underline"
           >
             Ir al panel
           </button>
         </div>
       ) : null}
 
-      <form onSubmit={createHouse} className="space-y-3 rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800">
-        <h2 className="text-sm font-semibold">Crear hogar nuevo</h2>
+      <form onSubmit={createHouse} className="ui-card space-y-3 p-6">
+        <h2 className="text-sm font-semibold text-foreground">Crear hogar nuevo</h2>
         <input
           value={houseName}
           onChange={(e) => setHouseName(e.target.value)}
           placeholder="Nombre del hogar"
-          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="ui-input"
         />
-        <button
-          type="submit"
-          disabled={loading !== null}
-          className="w-full rounded-lg bg-foreground py-2 text-sm font-medium text-background disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading !== null} className="ui-btn">
           {loading === "create" ? "Creando…" : "Crear y obtener código"}
         </button>
       </form>
 
-      <form onSubmit={joinHouse} className="space-y-3 rounded-2xl border border-zinc-200 p-6 dark:border-zinc-800">
-        <h2 className="text-sm font-semibold">Unirme a un hogar</h2>
+      <form onSubmit={joinHouse} className="ui-card space-y-3 p-6">
+        <h2 className="text-sm font-semibold text-foreground">Unirme a un hogar</h2>
         <input
           value={joinCode}
           onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
           placeholder="Código (ej. ABC12D)"
           maxLength={12}
-          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-sm uppercase dark:border-zinc-700 dark:bg-zinc-900"
+          className="ui-input font-mono uppercase tracking-wider"
         />
         <button
           type="submit"
           disabled={loading !== null || joinCode.trim().length < 4}
-          className="w-full rounded-lg border border-zinc-300 py-2 text-sm font-medium dark:border-zinc-600 disabled:opacity-50"
+          className="ui-btn-secondary"
         >
           {loading === "join" ? "Uniendo…" : "Unirme"}
         </button>

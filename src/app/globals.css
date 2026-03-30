@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
+/* Tema claro cálido por defecto (no sigue el modo oscuro del sistema). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+
+  --background: #f3ece4;
+  --foreground: #1c1917;
+  --muted: #e7dfd4;
+  --muted-foreground: #6b645b;
+  --card: #fffcfa;
+  --card-border: #e3d9ce;
+  --border: #ddd3c7;
+  --primary: #c45c4a;
+  --primary-dim: #a84d3e;
+  --primary-foreground: #fff9f7;
+  --sidebar: #ebe3d9;
+  --sidebar-border: #dfd5c8;
+  --success-soft: #e8f0eb;
+  --ring: rgba(196, 92, 74, 0.35);
+  --shadow-card: 0 1px 2px rgba(28, 25, 23, 0.04), 0 10px 28px rgba(28, 25, 23, 0.06);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-dim: var(--primary-dim);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-border: var(--sidebar-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer components {
+  .ui-shell {
+    @apply min-h-full bg-gradient-to-b from-background via-background to-muted/40;
+  }
+
+  .ui-card {
+    border-radius: 1.25rem;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    box-shadow: var(--shadow-card);
+  }
+
+  .ui-input {
+    @apply w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground outline-none transition-[box-shadow,border-color];
+    box-shadow: 0 1px 1px rgba(28, 25, 23, 0.03);
+  }
+
+  .ui-input::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.65;
+  }
+
+  .ui-input:focus {
+    border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+    box-shadow: 0 0 0 3px var(--ring);
+  }
+
+  .ui-btn {
+    @apply w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-[transform,opacity,background-color];
+    background: var(--primary);
+    color: var(--primary-foreground);
+    box-shadow: 0 1px 2px rgba(28, 25, 23, 0.08);
+  }
+
+  .ui-btn:hover:not(:disabled) {
+    background: var(--primary-dim);
+  }
+
+  .ui-btn:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+
+  .ui-btn-secondary {
+    @apply w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition-colors;
+  }
+
+  .ui-btn-secondary:hover:not(:disabled) {
+    background: var(--muted);
+  }
+
+  .ui-btn-secondary:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
 }

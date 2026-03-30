@@ -36,15 +36,13 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+    <form onSubmit={onSubmit} className="ui-card space-y-4 p-7">
       {error ? (
-        <p className="rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-600 dark:text-red-400">
-          {error}
-        </p>
+        <p className="rounded-xl bg-red-500/[0.12] px-3 py-2.5 text-sm text-red-700">{error}</p>
       ) : null}
-      <div className="space-y-1">
-        <label htmlFor="name" className="text-sm font-medium">
-          Nombre (cómo aparecerá en los registros)
+      <div className="space-y-1.5">
+        <label htmlFor="name" className="text-sm font-medium text-foreground">
+          Nombre (así te verá tu pareja en la app)
         </label>
         <input
           id="name"
@@ -52,11 +50,11 @@ export function RegisterForm() {
           required
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
-          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm outline-none ring-foreground/20 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900"
+          className="ui-input"
         />
       </div>
-      <div className="space-y-1">
-        <label htmlFor="email" className="text-sm font-medium">
+      <div className="space-y-1.5">
+        <label htmlFor="email" className="text-sm font-medium text-foreground">
           Correo
         </label>
         <input
@@ -66,12 +64,12 @@ export function RegisterForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm outline-none ring-foreground/20 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900"
+          className="ui-input"
         />
       </div>
-      <div className="space-y-1">
-        <label htmlFor="password" className="text-sm font-medium">
-          Contraseña
+      <div className="space-y-1.5">
+        <label htmlFor="password" className="text-sm font-medium text-foreground">
+          Contraseña (mín. 6 caracteres)
         </label>
         <input
           id="password"
@@ -81,14 +79,10 @@ export function RegisterForm() {
           minLength={6}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm outline-none ring-foreground/20 focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900"
+          className="ui-input"
         />
       </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-lg bg-foreground py-2.5 text-sm font-medium text-background transition-opacity disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className="ui-btn">
         {loading ? "Creando…" : "Registrarse"}
       </button>
     </form>
