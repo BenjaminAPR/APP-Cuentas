@@ -17,7 +17,10 @@ export function InstallTip() {
       const standalone =
         window.matchMedia("(display-mode: standalone)").matches ||
         nav.standalone === true;
-      if (isIOS && !standalone) setVisible(true);
+      if (isIOS && !standalone) {
+        // Evita el warning de React/Lint: hacemos el setState en el siguiente ciclo.
+        queueMicrotask(() => setVisible(true));
+      }
     } catch {
       /* ignore */
     }

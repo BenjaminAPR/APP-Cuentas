@@ -36,14 +36,14 @@ function mergeItems(
   expenses: ExpenseRow[],
   payments: DebtPaymentRow[],
   debtNameById: Record<string, string>,
-  categoryLabel: (c: string) => string,
+  categoryMap: Record<string, string>,
 ) {
   const items: ListItem[] = [
     ...expenses.map((r) => ({
       id: r.id,
       kind: "expense" as const,
       date: r.expense_date,
-      categoryText: categoryLabel(r.category),
+      categoryText: categoryMap[r.category] ?? r.category,
       amount: Number(r.amount),
       createdBy: r.created_by,
       notes: r.notes ?? null,
@@ -68,14 +68,14 @@ export function GastosClient({
   initialDebtPayments,
   debtNameById,
   memberNames,
-  categoryLabel,
+  categoryMap,
 }: {
   householdId: string;
   initialExpenses: ExpenseRow[];
   initialDebtPayments: DebtPaymentRow[];
   debtNameById: Record<string, string>;
   memberNames: Record<string, string>;
-  categoryLabel: (c: string) => string;
+  categoryMap: Record<string, string>;
 }) {
   const [expenses, setExpenses] = useState<ExpenseRow[]>(initialExpenses);
   const [payments, setPayments] = useState<DebtPaymentRow[]>(initialDebtPayments);
@@ -84,8 +84,8 @@ export function GastosClient({
   const [error, setError] = useState<string | null>(null);
 
   const items = useMemo(
-    () => mergeItems(expenses, payments, debtNameById, categoryLabel),
-    [expenses, payments, debtNameById, categoryLabel],
+    () => mergeItems(expenses, payments, debtNameById, categoryMap),
+    [expenses, payments, debtNameById, categoryMap],
   );
 
   const cursorDate = items.at(-1)?.date ?? null;

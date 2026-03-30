@@ -21,6 +21,8 @@ export default async function GastosPage() {
   const supabase = await createClient();
   const { start, end, label: monthLabel } = monthBounds();
 
+  const categoryMap = Object.fromEntries(categories.map((c) => [c.value, c.label]));
+
   const [
     expensesRes,
     debtPaymentsRes,
@@ -59,8 +61,6 @@ export default async function GastosPage() {
   ]);
 
   const names = await loadMemberNames(supabase, householdId);
-
-  const label = (c: string) => categories.find((x) => x.value === c)?.label ?? c;
 
   const debtNameById = Object.fromEntries(
     (debtsRes.data ?? []).map((d: { id: string; name: string }) => [d.id, d.name]),
@@ -119,11 +119,25 @@ export default async function GastosPage() {
       <ExpenseForm householdId={householdId} categories={categories} />
       <GastosClient
         householdId={householdId}
-        initialExpenses={(expensesRes.data ?? []) as any[]}
-        initialDebtPayments={(debtPaymentsRes.data ?? []) as any[]}
+        initialExpenses={(expensesRes.data ?? []) as Array<{
+          id: string;
+          amount: number | string;
+          expense_date: string;
+          category: string;
+          notes: string | null;
+          created_by: string;
+        }>}
+        initialDebtPayments={(debtPaymentsRes.data ?? []) as Array<{
+          id: string;
+          amount: number | string;
+          payment_date: string;
+          notes: string | null;
+          created_by: string;
+          debt_id: string;
+        }>}
         debtNameById={debtNameById}
         memberNames={names}
-        categoryLabel={label}
+        categoryMap={categoryMap}
       />
     </div>
   );
