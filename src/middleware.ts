@@ -7,6 +7,15 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Solo las rutas del panel: así la navegación entre pestañas evita
+    // trabajo extra del middleware en páginas públicas (login/register).
+    "/",
+    "/ingresos",
+    "/gastos",
+    "/cuentas",
+    "/iglesia",
+    "/deudas",
+    "/actividad",
+    "/hogar",
   ],
 };

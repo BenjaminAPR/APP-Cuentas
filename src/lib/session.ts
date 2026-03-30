@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { cache } from "react";
 
 export type SessionContext = {
   userId: string;
@@ -23,8 +24,12 @@ export async function requireUser() {
   return { supabase, user, profile };
 }
 
+const requireUserCached = cache(async () => {
+  return requireUser();
+});
+
 export async function requireHousehold(): Promise<SessionContext> {
-  const { supabase, user, profile } = await requireUser();
+  const { supabase, user, profile } = await requireUserCached();
   if (!profile.household_id) redirect("/onboarding");
   return {
     userId: user.id,
