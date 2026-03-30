@@ -61,19 +61,19 @@ export function ExpenseForm({ householdId, categories }: { householdId: string; 
         required
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       />
       <input
         type="date"
         required
         value={expense_date}
         onChange={(e) => setExpenseDate(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       />
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2 lg:col-span-2"
+        className="field sm:col-span-2 lg:col-span-2"
       >
         {categories.map((c) => (
           <option key={c.value} value={c.value}>
@@ -86,12 +86,12 @@ export function ExpenseForm({ householdId, categories }: { householdId: string; 
         placeholder="Notas"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm lg:col-span-1"
+        className="field lg:col-span-1"
       />
       <button
         type="submit"
         disabled={loading}
-        className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50"
+        className="ui-btn"
       >
         {loading ? "Guardando…" : "Agregar"}
       </button>

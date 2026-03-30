@@ -55,7 +55,7 @@ export function ChurchForm({ householdId }: { householdId: string }) {
       <select
         value={payment_type}
         onChange={(e) => setPaymentType(e.target.value as "diezmo" | "ayuno")}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       >
         <option value="diezmo">Diezmo</option>
         <option value="ayuno">Ofrenda de ayuno</option>
@@ -67,26 +67,26 @@ export function ChurchForm({ householdId }: { householdId: string }) {
         required
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       />
       <input
         type="date"
         required
         value={payment_date}
         onChange={(e) => setPaymentDate(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       />
       <input
         type="text"
         placeholder="Notas"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2 lg:col-span-1"
+        className="field sm:col-span-2 lg:col-span-1"
       />
       <button
         type="submit"
         disabled={loading}
-        className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50"
+        className="ui-btn"
       >
         {loading ? "Guardando…" : "Registrar"}
       </button>

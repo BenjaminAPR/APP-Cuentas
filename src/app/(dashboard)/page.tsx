@@ -54,7 +54,7 @@ export default async function DashboardPage() {
   });
 
   const statCard =
-    "rounded-2xl border border-border bg-card p-5 shadow-sm ring-1 ring-stone-900/[0.04]";
+    "rounded-3xl border border-border bg-card p-5 shadow-sm ring-1 ring-stone-900/[0.04] sm:p-6";
 
   return (
     <div className="mx-auto max-w-4xl space-y-10">

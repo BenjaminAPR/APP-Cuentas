@@ -60,14 +60,14 @@ export function IncomeForm({ householdId }: { householdId: string }) {
         required
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       />
       <input
         type="date"
         required
         value={income_date}
         onChange={(e) => setIncomeDate(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+        className="field"
       />
       <input
         type="text"
@@ -75,19 +75,19 @@ export function IncomeForm({ householdId }: { householdId: string }) {
         required
         value={source}
         onChange={(e) => setSource(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2 lg:col-span-1"
+        className="field sm:col-span-2 lg:col-span-1"
       />
       <input
         type="text"
         placeholder="Notas"
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
-        className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2 lg:col-span-1"
+        className="field sm:col-span-2 lg:col-span-1"
       />
       <button
         type="submit"
         disabled={loading}
-        className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50 sm:col-span-2 lg:col-span-1"
+        className="ui-btn sm:col-span-2 lg:col-span-1"
       >
         {loading ? "Guardando…" : "Agregar"}
       </button>

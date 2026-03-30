@@ -177,12 +177,12 @@ export function DebtForms({
           required
           value={nName}
           onChange={(e) => setNName(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <select
           value={nType}
           onChange={(e) => setNType(e.target.value as "tarjeta" | "otro")}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         >
           <option value="tarjeta">Tarjeta</option>
           <option value="otro">Otra</option>
@@ -192,54 +192,54 @@ export function DebtForms({
           required
           value={nBalance}
           onChange={(e) => setNBalance(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <input
           placeholder="Monto original total (opcional)"
           value={nTotal}
           onChange={(e) => setNTotal(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <input
           placeholder="Valor cuota típica (opcional)"
           value={nInstallment}
           onChange={(e) => setNInstallment(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <input
           placeholder="Nº cuotas totales (opcional)"
           value={nInstallTotal}
           onChange={(e) => setNInstallTotal(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <input
           placeholder="Cuotas ya pagadas (default 0)"
           value={nInstallPaid}
           onChange={(e) => setNInstallPaid(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <input
           placeholder="Día vencimiento 1–31 (opcional)"
           value={nDue}
           onChange={(e) => setNDue(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+          className="field"
         />
         <input
           placeholder="Acreedor (opcional)"
           value={nCreditor}
           onChange={(e) => setNCreditor(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2"
+          className="field sm:col-span-2"
         />
         <input
           placeholder="Notas"
           value={nNotes}
           onChange={(e) => setNNotes(e.target.value)}
-          className="rounded-lg border border-border bg-card px-3 py-2 text-sm sm:col-span-2"
+          className="field sm:col-span-2"
         />
         <button
           type="submit"
           disabled={loadingNew}
-          className="rounded-xl bg-primary py-2 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50 sm:col-span-2 lg:col-span-1"
+          className="ui-btn sm:col-span-2 lg:col-span-1"
         >
           {loadingNew ? "Guardando…" : "Agregar deuda"}
         </button>
@@ -292,7 +292,7 @@ export function DebtForms({
                         name="amount"
                         required
                         placeholder="Monto"
-                        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                        className="field"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -301,7 +301,7 @@ export function DebtForms({
                         name="payment_date"
                         type="date"
                         defaultValue={new Date().toISOString().slice(0, 10)}
-                        className="rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                        className="field"
                       />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -311,18 +311,18 @@ export function DebtForms({
                         type="number"
                         min={0}
                         defaultValue={1}
-                        className="w-24 rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                        className="field w-24 min-w-[6rem]"
                       />
                     </div>
                     <input
                       name="notes"
                       placeholder="Notas"
-                      className="min-w-[120px] flex-1 rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                      className="field min-w-[120px] flex-1"
                     />
                     <button
                       type="submit"
                       disabled={payingId === d.id}
-                      className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50"
+                      className="inline-flex min-h-[3.25rem] shrink-0 items-center justify-center rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-50"
                     >
                       {payingId === d.id ? "…" : "Registrar pago"}
                     </button>
